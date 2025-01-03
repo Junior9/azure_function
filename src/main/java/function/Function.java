@@ -15,6 +15,23 @@ import java.util.Optional;
  * Azure Functions with HTTP Trigger.
  */
 public class Function {
+
+
+
+    @FunctionName("test")
+    public HttpResponseMessage test(
+            @HttpTrigger(
+                name = "req",
+                methods = {HttpMethod.GET, HttpMethod.POST},
+                authLevel = AuthorizationLevel.ANONYMOUS)
+                HttpRequestMessage<Optional<String>> request,
+            final ExecutionContext context) {
+        context.getLogger().info("Java HTTP trigger processed a request.");
+
+        return request.createResponseBuilder(HttpStatus.OK).body("Azure functions").build();
+    }
+
+
     /**
      * This function listens at endpoint "/api/HttpExample". Two ways to invoke it using "curl" command in bash:
      * 1. curl -d "HTTP Body" {your host}/api/HttpExample
