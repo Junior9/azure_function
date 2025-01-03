@@ -8,6 +8,7 @@ import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.BindingName;
 import com.microsoft.azure.functions.annotation.BlobTrigger;
+import com.microsoft.azure.functions.annotation.EventGridTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 
@@ -57,6 +58,15 @@ public class Function {
         final ExecutionContext context
     ) {
         context.getLogger().info("Name: " + filename + ", Size: " + content.length + " bytes");
+    }
+
+
+    @FunctionName("eventGridMonitor")
+    public void logEvent(
+        @EventGridTrigger(name = "event") String content,
+        final ExecutionContext context
+    ) {
+        context.getLogger().info(content);
     }
 
     /**
