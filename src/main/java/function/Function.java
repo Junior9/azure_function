@@ -6,6 +6,8 @@ import com.microsoft.azure.functions.HttpRequestMessage;
 import com.microsoft.azure.functions.HttpResponseMessage;
 import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
+import com.microsoft.azure.functions.annotation.BindingName;
+import com.microsoft.azure.functions.annotation.BlobTrigger;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 
@@ -31,6 +33,31 @@ public class Function {
         return request.createResponseBuilder(HttpStatus.OK).body("Azure functions").build();
     }
 
+
+    @FunctionName("blobMonitor")
+    public void blobMonitor(
+        @BlobTrigger(name = "file",
+                    dataType = "binary",
+                    path = "samples-workitems/{name}",
+                    connection = "AzureWebJobsStorage") byte[] content,
+        @BindingName("name") String filename,
+        final ExecutionContext context
+    ) {
+        context.getLogger().info("Name: " + filename + ", Size: " + content.length + " bytes");
+    }
+
+
+    @FunctionName("blobMonitor2")
+    public void blobMonitor1(
+        @BlobTrigger(name = "file",
+                    dataType = "binary",
+                    path = "monitor/",
+                    connection = "AzureWebJobsStorage") byte[] content,
+        @BindingName("name") String filename,
+        final ExecutionContext context
+    ) {
+        context.getLogger().info("Name: " + filename + ", Size: " + content.length + " bytes");
+    }
 
     /**
      * This function listens at endpoint "/api/HttpExample". Two ways to invoke it using "curl" command in bash:
